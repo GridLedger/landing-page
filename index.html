@@ -14,6 +14,29 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:#0B110F}
 a{color:#C9D4CF}a:hover{color:#FFFFFF}
+.demo{max-width:1200px;margin:0 auto;padding:112px 24px 16px;display:flex;flex-wrap:wrap;gap:64px;align-items:center;justify-content:space-between;color:#E8EEEA;font-family:'Instrument Sans',system-ui,sans-serif}
+.demo-copy{flex:1 1 440px;min-width:0;max-width:560px;display:flex;flex-direction:column;gap:20px}
+.demo .eyebrow{margin:0;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#8FA39A}
+.demo h2{margin:0;font-size:clamp(30px,4vw,44px);line-height:1.12;font-weight:600;letter-spacing:-.02em}
+.demo .lead{margin:0;font-size:17px;line-height:1.6;color:#C9D4CF}
+.beats{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;border-top:1px solid #1E2925}
+.beats li{display:flex;gap:20px;padding:18px 0;border-bottom:1px solid #1E2925}
+.beats .beat-n{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent);padding-top:3px;flex:0 0 auto}
+.beats div{display:flex;flex-direction:column;gap:4px}
+.beats strong{font-size:17px;font-weight:600}
+.beats div span{font-size:15px;line-height:1.55;color:#A9B8B1}
+.demo .note{margin:0;font-size:13px;color:#8FA39A}
+.demo-media{flex:0 1 360px;min-width:0;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:14px}
+.device{position:relative;width:100%;max-width:360px;aspect-ratio:9/16;border-radius:28px;padding:10px;box-sizing:border-box;background:#111A17;border:1px solid #26332E;box-shadow:0 0 0 1px rgba(196,242,92,.04),0 40px 80px -40px rgba(196,242,92,.18)}
+.device video{display:block;width:100%;height:100%;object-fit:cover;border-radius:19px;background:#09100F}
+.demo-toggle{position:absolute;right:22px;bottom:22px;width:44px;height:44px;border-radius:999px;border:1px solid #33423C;background:rgba(11,17,15,.78);color:#E8EEEA;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:.85;transition:opacity .2s,border-color .2s}
+.demo-toggle:hover,.demo-toggle:focus-visible{opacity:1;border-color:var(--accent)}
+.demo-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.demo-toggle .i-pause{display:none}
+.demo-toggle[aria-pressed="true"] .i-pause{display:block}
+.demo-toggle[aria-pressed="true"] .i-play{display:none}
+.demo-media figcaption{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#8FA39A}
+@media (max-width:720px){.demo{padding-top:80px;gap:40px}.device{max-width:300px}}
 </style>
 </head>
 <body>
@@ -87,6 +110,33 @@ a{color:#C9D4CF}a:hover{color:#FFFFFF}
 </div>
 </div>
 </div>
+</section>
+
+<section id="one-site" class="demo">
+<div class="demo-copy">
+<p class="eyebrow">One site, twenty-four hours</p>
+<h2>Watch idle headroom become storage and compute.</h2>
+<p class="lead">The same grid connection, the same day. Add a battery, then partner-run compute, and the capacity you already pay for starts working around the clock.</p>
+<ol class="beats">
+<li><span class="beat-n">01</span><div><strong>The connection sits partly idle.</strong><span>Most of the day, a large share of import capacity goes unused.</span></div></li>
+<li><span class="beat-n">02</span><div><strong>A battery reshapes the day.</strong><span>Storage fills the valleys and shaves the peaks that drive your bill.</span></div></li>
+<li><span class="beat-n">03</span><div><strong>Compute takes the headroom.</strong><span>A modular data centre uses what is left, with margin held back for your site.</span></div></li>
+<li><span class="beat-n">04</span><div><strong>Measured data tightens the plan.</strong><span>Telemetry from day one narrows forecast error year after year.</span></div></li>
+</ol>
+<p class="note">Illustrative site profile. Your feasibility study models your own interval data.</p>
+</div>
+<figure class="demo-media">
+<div class="device">
+<video id="demo-video" muted loop playsinline preload="metadata" poster="media/one-site-poster.jpg" aria-label="Animation: one site's grid connection over 24 hours, from idle headroom to battery and compute filling it">
+<source src="media/one-site.mp4" type="video/mp4">
+</video>
+<button type="button" class="demo-toggle" id="demo-toggle" aria-label="Play animation" aria-pressed="false">
+<svg class="i-play" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"></path></svg>
+<svg class="i-pause" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"></rect><rect x="9.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"></rect></svg>
+</button>
+</div>
+<figcaption>45-second loop · no sound</figcaption>
+</figure>
 </section>
 
 <section style="max-width: 1200px; margin: 0 auto; padding: 96px 24px">
@@ -267,5 +317,22 @@ a{color:#C9D4CF}a:hover{color:#FFFFFF}
 </footer>
 
 </div>
+<script>
+(function(){
+  var v=document.getElementById('demo-video'),b=document.getElementById('demo-toggle');
+  if(!v||!b)return;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var userPaused=reduce;
+  function sync(){var on=!v.paused;b.setAttribute('aria-pressed',on?'true':'false');b.setAttribute('aria-label',on?'Pause animation':'Play animation');}
+  v.addEventListener('play',sync);v.addEventListener('pause',sync);
+  b.addEventListener('click',function(){if(v.paused){userPaused=false;v.play().catch(function(){});}else{userPaused=true;v.pause();}});
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting){if(!userPaused)v.play().catch(function(){});}else{v.pause();}
+    });},{threshold:0.35}).observe(v);
+  }else if(!reduce){v.play().catch(function(){});}
+  sync();
+})();
+</script>
 </body>
 </html>
